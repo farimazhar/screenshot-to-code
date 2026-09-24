@@ -1,37 +1,43 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Screenshot to Code</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#0a0a0a;color:#fff;padding:15px}header{text-align:center;padding:25px}h1{font-size:26px}.card{background:#171717;border:1px solid #333;border-radius:16px;padding:18px;margin-bottom:15px}input{width:100%;padding:12px;background:#000;border:1px dashed #555;border-radius:10px;color:#fff}img{width:100%;border-radius:12px;margin-top:12px}#gen{width:100%;padding:14px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-weight:bold;font-size:16px}textarea{width:100%;height:250px;background:#000;color:#0f0;border:1px solid #333;border-radius:10px;padding:10px;margin-top:10px}#preview{background:#fff;color:#000;border-radius:10px;padding:10px;margin-top:10px;min-height:100px}#copy{width:100%;padding:12px;background:#222;color:#fff;border:1px solid #333;border-radius:10px;margin-top:10px}
+</style>
 </head>
 <body>
 <header>
 <h1>📸 Screenshot to Code</h1>
-<p>Upload screenshot → Get HTML + Tailwind</p>
+<p>Upload → Get Code</p>
 </header>
-
-<main>
 <div class="card">
-<h3>Upload</h3>
-<input type="file" id="fileInput" accept="image/*">
-<img id="previewImg" class="hidden">
+<input type="file" id="file" accept="image/*">
+<img id="img" style="display:none">
 </div>
-
 <div class="card">
-<button id="genBtn">⚡ Generate Code</button>
-<div class="tabs">
-<button onclick="showTab('html')" class="tab active">HTML</button>
-<button onclick="showTab('preview')" class="tab">Preview</button>
+<button id="gen">⚡ Generate Code</button>
+<textarea id="code" placeholder="Code yahan ayega..."></textarea>
+<button id="copy">📋 Copy</button>
+<div id="preview">Preview yahan ayega</div>
 </div>
-<textarea id="codeOutput"></textarea>
-<div id="previewOutput" class="hidden"></div>
-<button id="copyBtn">📋 Copy</button>
-</div>
-</main>
-
-<script src="app.js"></script>
+<script>
+let data="";
+document.getElementById('file').onchange=e=>{
+ let r=new FileReader();
+ r.onload=x=>{data=x.target.result;let im=document.getElementById('img');im.src=data;im.style.display='block';};
+ r.readAsDataURL(e.target.files[0]);
+};
+document.getElementById('gen').onclick=()=>{
+ if(!data){alert('Pehle photo upload karo');return;}
+ let c=`<div style="min-height:100vh;background:linear-gradient(135deg,#7c3aed,#3b82f6);display:flex;align-items:center;justify-content:center;padding:20px"><div style="background:white;border-radius:20px;padding:25px;max-width:350px;width:100%"><img src="${data}" style="width:100%;border-radius:12px;margin-bottom:12px"><h2 style="font-weight:bold;font-size:20px;color:#111">UI Card</h2><p style="color:#666">From screenshot</p><button style="width:100%;margin-top:15px;background:#7c3aed;color:white;padding:10px;border:none;border-radius:8px">Continue</button></div></div>`;
+ document.getElementById('code').value=c;
+ document.getElementById('preview').innerHTML=c;
+};
+document.getElementById('copy').onclick=()=>{navigator.clipboard.writeText(document.getElementById('code').value);alert('Copied!');};
+</script>
 </body>
 </html>
