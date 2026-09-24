@@ -1,0 +1,32 @@
+let imgData = "";
+document.getElementById('fileInput').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    imgData = ev.target.result;
+    const img = document.getElementById('previewImg');
+    img.src = imgData;
+    img.style.display='block';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('genBtn').addEventListener('click', ()=>{
+  if(!imgData){alert('Pehle screenshot upload karo');return;}
+  const code = `<div class="min-h-screen bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl">
+    <img src="${imgData}" class="w-full rounded-xl mb-6" />
+    <h2 class="text-2xl font-bold">Your UI</h2>
+    <p class="text-gray-500 mt-2">Generated from screenshot</p>
+    <button class="mt-6 w-full bg-violet-600 text-white py-3 rounded-xl font-bold">Continue</button>
+  </div>
+</div>`;
+  document.getElementById('codeOutput').value = code;
+  document.getElementById('previewOutput').innerHTML = code;
+});
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+  navigator.clipboard.writeText(document.getElementById('codeOutput').value);
+  alert('Copied!');
+});
